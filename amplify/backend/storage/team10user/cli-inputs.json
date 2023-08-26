@@ -1,0 +1,10 @@
+{
+  "resourceName": "team10user",
+  "tableName": "team10user",
+  "partitionKey": {
+    "fieldName": "email",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

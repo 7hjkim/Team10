@@ -12,7 +12,16 @@
       ],
       "output": {
         "authConfig": {
-          "additionalAuthenticationProviders": [],
+          "additionalAuthenticationProviders": [
+            {
+              "apiKeyConfig": {
+                "apiKeyExpirationDate": "2023-09-01T04:33:05.488Z",
+                "apiKeyExpirationDays": 7,
+                "description": ""
+              },
+              "authenticationType": "API_KEY"
+            }
+          ],
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
@@ -53,6 +62,38 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "team10f658c093": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_team10f658c093_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "team10f658c093"
+        }
+      ]
+    },
+    "AMPLIFY_function_team10f658c093_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "team10f658c093"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "team10user": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
     }
   }
 }

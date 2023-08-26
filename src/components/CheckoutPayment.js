@@ -1,43 +1,65 @@
-// Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-// SPDX-License-Identifier: MIT-0
-
+import Amplify from 'aws-amplify';
 import React from 'react'
-import { Card, Button, Divider, Grid } from 'semantic-ui-react'
+import { useState, useEffect } from 'react';
+import { Card, Button, Divider, Grid, Input } from 'semantic-ui-react'
 import styled from 'styled-components'
+import { API, graphqlOperation } from 'aws-amplify';
+import { createPatient } from '../graphql/mutations';
+import awsExports from "../aws-exports";
+
+Amplify.configure(awsExports);
+
 
 function CheckoutPayment(props) {
     const {total} = props
+    const [items, setItems] = useState([]);
+    const [itemEmail, setItemEmail] = useState('');
+    const [itemName, setItemName] = useState('');
+    const [itemBirth, setItemBirth] = useState('');
+    const [itemPhone, setItemPhone] = useState('');
+
+    async function createPatientItem() {
+        const patient = {
+            email: itemEmail,
+            name: itemName,
+            birth: itemBirth,
+            phone: itemPhone,
+        };
+        await API.graphql(graphqlOperation(createPatient, { input: patient }));
+        
+        window.location.reload();
+    };
 
     return(
         <div>
             <Card fluid>
                 <Card.Content>
-                    <Button fluid color='orange' loading={props.placedOrder} onClick={props.onOrder}>Place your order</Button>
+                    <Button fluid color='orange' loading={props.placedOrder} onClick={createPatientItem}>Add Patient</Button>
                     <Divider/>
-                    <BoldText>Order Summary</BoldText>
-                    <Grid columns={2}>
-                        <Grid.Row>
-                            <Grid.Column floated='left' width={8}>
-                                <SummaryText>Items:</SummaryText>
-                                <SummaryText>Shipping & handling:</SummaryText>
-                            </Grid.Column>
-                            <Grid.Column floated='left' textAlign='right' width={1}>
-                                <SummaryText>${total}</SummaryText>
-                                <SummaryText>$0.00</SummaryText>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
+                    <Input
+                        placeholder="이메일 *"
+                        value={itemEmail}
+                        onChange={(event) => setItemEmail(event.target.value)}
+                    />
+                    <Input
+                        placeholder="이름 *"
+                        value={itemName}
+                        onChange={(event) => setItemName(event.target.value)}
+                    />
+                    <Input
+                        placeholder="주민번호 앞 6자리 *"
+                        value={itemBirth}
+                        onChange={(event) => {
+                            const inputText = event.target.value;
+                            setItemBirth(inputText.substring(0, 6));
+                        }}
+                    />
+                    <Input
+                        placeholder="전화번호(-없이) *"
+                        value={itemPhone}
+                        onChange={(event) => setItemPhone(event.target.value)}
+                    />
                     <Divider/>
-                    <Grid columns={2}>
-                        <Grid.Row>
-                            <Grid.Column floated='left' width={7}>
-                                <TotalText>Order total:</TotalText>
-                            </Grid.Column>
-                            <Grid.Column floated='left' textAlign='right' width={1}>
-                                <TotalText>${total}</TotalText>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
                 </Card.Content>
               </Card>
         </div>

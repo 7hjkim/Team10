@@ -7,7 +7,7 @@ import { Grid } from 'semantic-ui-react'
 import AppContext from '../context/AppContext'
 
 import InitState from './InitState'
-import CheckoutBanner from '../components/CheckoutBanner'
+import PageMenu from '../components/PageMenu'
 import CheckoutSummary from '../components/CheckoutSummary'
 import CheckoutPayment from '../components/CheckoutPayment'
 
@@ -78,7 +78,7 @@ function Checkout(props) {
     return (
         <div>
             <InitState/>
-            <CheckoutBanner quantity={quantText}/>
+            <PageMenu/>
             <div style={mainDiv}>
                 <Grid columns={2}>
                     <Grid.Row>

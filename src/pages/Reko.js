@@ -1,78 +1,17 @@
-import React, { useState } from 'react';
-import { useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+
 import Amplify from 'aws-amplify';
-import awsconfig from '../aws-exports';
-import { Dropdown } from 'semantic-ui-react'
-import { updateTodo } from '../graphql/mutations';
-import { listTodos } from '../graphql/queries';
 import { API, graphqlOperation } from 'aws-amplify';
-import TopMenu from '../components/TopMenu'
-import InitState from './InitState'
+import { createDiagnosis } from '../graphql/mutations';
+import { listPatients } from '../graphql/queries';
+import awsExports from "../aws-exports";
+import { Dropdown } from 'semantic-ui-react'
+import InitState from './InitState';
+import PageMenu from '../components/PageMenu';
 
-Amplify.configure(awsconfig);
+Amplify.configure(awsExports);
 
-const styles = {
-    reset: {
-        margin: 0,
-        padding: 0,
-        boxSizing: 'border-box',
-    },
-    body: {
-        fontFamily: 'Arial, sans-serif',
-        backgroundColor: '#f0f0f0',
-        color: '#333',
-    },
-    container: {
-        maxWidth: '600px',
-        margin: '0 auto',
-        padding: '20px',
-        backgroundColor: '#fff',
-        borderRadius: '10px',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-    },
-    form: {
-        marginBottom: '20px',
-    },
-    label: {
-        display: 'block',
-        marginBottom: '5px',
-        fontWeight: 'bold',
-    },
-    input: {
-        width: '100%',
-        padding: '8px',
-        marginBottom: '15px',
-        border: '1px solid #ccc',
-        borderRadius: '5px',
-    },
-    button: {
-        display: 'block',
-        width: '100%',
-        padding: '10px',
-        backgroundColor: '#007bff',
-        color: '#fff',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        transition: 'background-color 0.3s',
-    },
-    buttonHover: {
-        backgroundColor: '#0056b3',
-    },
-    h2: {
-        marginTop: '20px',
-    },
-    textarea: {
-        width: '100%',
-        padding: '10px',
-        border: '1px solid #ccc',
-        borderRadius: '5px',
-        backgroundColor: '#f9f9f9',
-        height: '200px',
-    },
-};
-
-const MedicalCertificate = () => {
+const MedicalCertificate = (props) => {
     const [patientName, setPatientName] = useState('');
     const [onsetDate, setOnsetDate] = useState('');
     const [diagnosis, setDiagnosis] = useState('');
@@ -80,47 +19,38 @@ const MedicalCertificate = () => {
     const [futureTreatment, setFutureTreatment] = useState('');
     const [nextAppointment, setNextAppointment] = useState('');
     const [translatedContent, setTranslatedContent] = useState('');
+    
     const [items, setItems] = useState([]);
     const [selectedName, setSelectedName] = useState('');
-    const [selectedId, setSelectedId] = useState('');
-
+    const [SelectedEmail, setSelectedEmail] = useState('');
+    const [SelectedId, setSelectedId] = useState('');
+    
     const dropdownStyle = {
         marginTop: '1em',
         marginLeft: '1em',
     };
-
-    async function listTodoItem() {
-        try {
-            const todos = await API.graphql(graphqlOperation(listTodos));
-            console.log(30, todos.data.listTodos.items);
-            setItems(todos.data.listTodos.items);
-        } catch (error) {
-            console.error(error);
-        }
+    
+    async function listPatientItem() {
+        const patients = await API.graphql(graphqlOperation(listPatients));
+        setItems(patients.data.listPatients.items);
     }
     
-    async function updateSpecificTodoItem(todoId, updatedDescription) {
-      const updatedTodo = { id: todoId, description: updatedDescription };
-      await API.graphql(graphqlOperation(updateTodo, { input: updatedTodo }));
-  }
-
     useEffect(() => {
-        listTodoItem(); // todo 항목을 가져와 todoItems 상태에 설정
+        listPatientItem();
     }, []);
     
-    const handleSelectPatient = (item) => {
-        setSelectedName(item.name);
-        setSelectedId(item.id);
-        setPatientName(item.name); // Set the selected patient name in the input field
+    const validateForm = () => {
+        if (!patientName || !onsetDate || !nextAppointment || !diagnosis || !treatment || !futureTreatment) {
+            alert("모든 필수 입력 필드를 채워주세요.");
+            return false;
+        }
+        return true;
     };
 
+
     const getTranslate = async () => {
-        if (!selectedId) {
-            alert('환자를 선택하세요!'); // Display an alert if no patient is selected
-            return;
-        }
         try {
-            const response = await fetch("https://piz4tubexwxmenkveheqwft4540opdtm.lambda-url.ap-northeast-2.on.aws/translate", {
+            const response = await fetch("https://y33tqo6n7l6bisqnr5uyu747y40jozlo.lambda-url.ap-northeast-2.on.aws/translate", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -137,56 +67,238 @@ const MedicalCertificate = () => {
 
             const data = await response.json();
             setTranslatedContent(data.assistant);
-            
-            updateSpecificTodoItem(selectedId, data.assistant);
+            const createdDiagnosis = await createDiagnosisRecord(SelectedEmail, SelectedId, data.assistant, onsetDate);
         } catch (error) {
             console.error(error);
         }
+        async function createDiagnosisRecord(SelectedEmail, SelectedId, diagnosis, onsetDate) {
+          try {
+            const input = {
+              email: SelectedEmail, // 환자 이메일 또는 다른 식별자를 사용할 수 있음
+              patientID: SelectedId,
+              diagnosis: diagnosis, // 채팅 내용을 JSON 문자열로 저장
+              date: onsetDate,
+            };
+        
+            const result = await API.graphql(graphqlOperation(createDiagnosis, { input }));
+            console.log('Diagnosis created:', result);
+        
+            return result.data.createScript; // 생성된 Script 객체 반환
+          } catch (error) {
+            console.error('Error creating Diagnosis:', error);
+            throw error;
+          }
+        }
+    };
+    
+    
+    const handleSelectPatient = (item) => {
+        setSelectedName(item.name);
+        setSelectedEmail(item.email);
+        setSelectedId(item.id);
+        setPatientName(item.name);
     };
 
+    
     return (
-        <div style={styles.container}>
-            <InitState />
-            <TopMenu />
-            <div>
-                <Dropdown text={selectedName || 'Select Patient'} pointing='top left' style={dropdownStyle}>
-                    <Dropdown.Menu>
-                        {items.map((item, index) => (
-                            <Dropdown.Item key={index} icon='address card' text={item.name +' '+ item.birth} onClick={() => {
-                                handleSelectPatient(item);
-                            }} />
-                        ))}
-                    </Dropdown.Menu>
-                </Dropdown>
+        <div>
+            <InitState/>
+            <PageMenu />
+            <div style={styles.container}>
+                <h1>Medical Diagnosis Report Translator</h1>
+                <div>
+                    <Dropdown text={selectedName || 'Select Patient'} pointing='top left' style={dropdownStyle}>
+                        <Dropdown.Menu>
+                            {items.map((item, index) => (
+                                <Dropdown.Item key={index} icon='address card' text={item.name +' '+ item.birth} onClick={() => {
+                                    handleSelectPatient(item);
+                                }} />
+                            ))}
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </div>
+                <div style={styles.buttonGroup2}>
+                    <div style={{ flex: 1 }}></div>
+                    <button style={styles.save_button}>Save</button>
+                    <button style={styles.end_button} onClick={() => props.history.push('/')}>End</button>
+                </div>
+                <div style={styles.content}>
+                    <div style={styles.left}>
+                        <div style={styles.template_left}>
+                            <h2 style={styles.h2}>Diagnosis Form</h2>
+                            <form id="medicalCertificateForm">
+                                <label htmlFor="patientName" style={styles.label}>환자 이름:</label>
+                                <input type="text" id="patientName" value={patientName} onChange={(e) => setPatientName(e.target.value)} style={styles.input} required />
+                
+                                <label htmlFor="onsetDate" style={styles.label}>발병일:</label>
+                                <input type="date" id="onsetDate" value={onsetDate} onChange={(e) => setOnsetDate(e.target.value)} style={styles.input} required />
+                
+                                <label htmlFor="nextAppointment" style={styles.label}>진단일:</label>
+                                <input type="date" id="nextAppointment" value={nextAppointment} onChange={(e) => setNextAppointment(e.target.value)} style={styles.input} required />
+                
+                                <label htmlFor="diagnosis" style={styles.label}>진단명:</label>
+                                <textarea id="diagnosis" value={diagnosis} onChange={(e) => setDiagnosis(e.target.value)} style={styles.textarea_left} required />
+                
+                                <label htmlFor="treatment" style={styles.label}>치료 내용:</label>
+                                <textarea id="treatment" value={treatment} onChange={(e) => setTreatment(e.target.value)} style={styles.textarea_left} required />
+                
+                                <label htmlFor="futureTreatment" style={styles.label}>향후 치료 계획:</label>
+                                <textarea id="futureTreatment" value={futureTreatment} onChange={(e) => setFutureTreatment(e.target.value)} style={styles.textarea_left} required />
+                
+                                <button type="button" onClick={() => {
+                                    if (validateForm()) {
+                                        getTranslate();
+                                    }
+                                }} style={styles.button}>
+                                    Start
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div style={styles.right}>
+                        <div style={styles.template_right}>
+                            <h2 style={styles.h2}>Translation Results</h2>
+                            <textarea id="translatedContent" value={translatedContent} readOnly style={styles.textarea_right}></textarea>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <h1>진단서 번역</h1>
-            <form id="medicalCertificateForm">
-                <label htmlFor="patientName" style={styles.label}>환자 이름:</label>
-                <input type="text" id="patientName" value={patientName} onChange={(e) => setPatientName(e.target.value)} style={styles.input} required />
-
-                <label htmlFor="onsetDate" style={styles.label}>발병일:</label>
-                <input type="date" id="onsetDate" value={onsetDate} onChange={(e) => setOnsetDate(e.target.value)} style={styles.input} required />
-
-                <label htmlFor="nextAppointment" style={styles.label}>다음 예약일:</label>
-                <input type="date" id="nextAppointment" value={nextAppointment} onChange={(e) => setNextAppointment(e.target.value)} style={styles.input} required />
-
-                <label htmlFor="diagnosis" style={styles.label}>진단명:</label>
-                <input type="text" id="diagnosis" value={diagnosis} onChange={(e) => setDiagnosis(e.target.value)} style={styles.input} required />
-
-                <label htmlFor="treatment" style={styles.label}>치료 내용:</label>
-                <input type="text" id="treatment" value={treatment} onChange={(e) => setTreatment(e.target.value)} style={styles.input} required />
-
-                <label htmlFor="futureTreatment" style={styles.label}>향후 치료 계획:</label>
-                <input type="text" id="futureTreatment" value={futureTreatment} onChange={(e) => setFutureTreatment(e.target.value)} style={styles.input} required />
-                <button type="button" onClick={getTranslate} style={styles.button}>번역하기</button>
-            </form>
-
-            <h2 style={styles.h2}>번역본</h2>
-            <textarea id="translatedContent" value={translatedContent} readOnly style={styles.textarea}></textarea>
-
-            
         </div>
-    );
+        );
+}
+export default MedicalCertificate;
+
+const styles = {
+    container: {
+        fontFamily: 'Arial, sans-serif',
+        backgroundColor: '#f9f9f9',
+        padding: '20px',
+        width: '80vw',
+        minHeight: '88vh',
+        margin: '0 auto',
+        borderRadius: '12px',
+        boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
+    },
+    
+    content: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginTop: '1rem',
+    },
+    left: {
+        flex: 1,
+        padding: '1rem',
+        borderRight: '1px solid #ccc',
+    },
+    right: {
+        flex: 1,
+        padding: '1rem',
+        // display: 'flex',
+        // borderRight: '1px solid #ccc',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    
+    template_left: {
+        width: '100%',
+        padding: '2rem',
+        border: '1px solid #ccc',
+        borderRadius: 5,
+        backgroundColor: '#f9f9f9',
+        boxShadow: '0px 0px 10px rgba(0,0,0,0.1)',
+    },
+
+
+
+    template_right: {
+        width: '100%',
+        padding: '2rem',
+        border: '1px solid #ccc',
+        borderRadius: 5,
+        backgroundColor: '#f9f9f9',
+        boxShadow: '0px 0px 10px rgba(0,0,0,0.1)',
+    },
+    
+    
+    buttonGroup2: {
+        display: 'flex',
+        marginBottom: '1rem',
+        fontSize: '13px',
+        padding: '0.1rem 0.1rem'
+    },
+    
+    save_button: {
+    },
+    
+    end_button: {
+        marginRight: '1.5rem',
+    },
+    
+    bullet1: {
+        marginRight: '10px',
+        // color: '#FF5733', // 원하는 색상으로 변경
+    },
+    bullet2: {
+        marginRight: '10px',
+        // color: '#3498DB', // 원하는 색상으로 변경
+    },
+    
+    h2: {
+        marginBottom: '30px',
+        textAlign: 'center'
+    },
+    form: {
+        marginBottom: '20px',
+    },
+    
+    label: {
+        display: 'block',
+        marginBottom: '5px',
+        marginTop: '15px',
+        fontWeight: 'bold',
+    },
+    
+    input: {
+        width: '100%',
+        padding: '8px',
+        marginBottom: '15px',
+        border: '1px solid #ccc',
+        borderRadius: '5px',
+        margin: '0 auto', 
+    },
+    
+    textarea_left: {
+        width: '100%',
+        padding: '10px',
+        border: '1px solid #ccc',
+        borderRadius: '5px',
+        minHeight: '100px',
+        resize: 'none',
+    },
+    
+    textarea_right: {
+        width: '100%',
+        padding: '10px',
+        border: '1px solid #ccc',
+        borderRadius: '5px',
+        backgroundColor: '#f9f9f9',
+        minHeight: '716px',
+    },
+    
+    button: {
+        display: 'block',
+        width: '100%',
+        padding: '10px',
+        backgroundColor: '#007bff',
+        color: '#fff',
+        marginTop: '20px',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        transition: 'background-color 0.3s',
+        minHeight: '50px',
+    },
 };
 
-export default MedicalCertificate;
+

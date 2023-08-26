@@ -15,6 +15,15 @@
       "auth": {
         "Team10Auth": {}
       },
+      "storage": {
+        "team10user": {}
+      },
+      "function": {
+        "team10f658c093": {
+          "deploymentBucketName": "amplify-team10-dev-12721-deployment",
+          "s3Key": "amplify-builds/team10f658c093-594746456b3459365353-build.zip"
+        }
+      },
       "api": {
         "team10": {}
       }

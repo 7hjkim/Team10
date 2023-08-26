@@ -1,18 +1,48 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateTodo = /* GraphQL */ `
-  subscription OnCreateTodo(
-    $filter: ModelSubscriptionTodoFilterInput
+export const onCreatePatient = /* GraphQL */ `
+  subscription OnCreatePatient(
+    $filter: ModelSubscriptionPatientFilterInput
     $owner: String
   ) {
-    onCreateTodo(filter: $filter, owner: $owner) {
+    onCreatePatient(filter: $filter, owner: $owner) {
       id
+      email
       name
       birth
       phone
-      description
-      script
+      scripts {
+        items {
+          id
+          email
+          patientID
+          script
+          summary
+          date
+          createdAt
+          updatedAt
+          owner
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      diagnoses {
+        items {
+          id
+          email
+          patientID
+          diagnosis
+          date
+          createdAt
+          updatedAt
+          owner
+          __typename
+        }
+        nextToken
+        __typename
+      }
       createdAt
       updatedAt
       owner
@@ -20,18 +50,48 @@ export const onCreateTodo = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateTodo = /* GraphQL */ `
-  subscription OnUpdateTodo(
-    $filter: ModelSubscriptionTodoFilterInput
+export const onUpdatePatient = /* GraphQL */ `
+  subscription OnUpdatePatient(
+    $filter: ModelSubscriptionPatientFilterInput
     $owner: String
   ) {
-    onUpdateTodo(filter: $filter, owner: $owner) {
+    onUpdatePatient(filter: $filter, owner: $owner) {
       id
+      email
       name
       birth
       phone
-      description
-      script
+      scripts {
+        items {
+          id
+          email
+          patientID
+          script
+          summary
+          date
+          createdAt
+          updatedAt
+          owner
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      diagnoses {
+        items {
+          id
+          email
+          patientID
+          diagnosis
+          date
+          createdAt
+          updatedAt
+          owner
+          __typename
+        }
+        nextToken
+        __typename
+      }
       createdAt
       updatedAt
       owner
@@ -39,18 +99,159 @@ export const onUpdateTodo = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteTodo = /* GraphQL */ `
-  subscription OnDeleteTodo(
-    $filter: ModelSubscriptionTodoFilterInput
+export const onDeletePatient = /* GraphQL */ `
+  subscription OnDeletePatient(
+    $filter: ModelSubscriptionPatientFilterInput
     $owner: String
   ) {
-    onDeleteTodo(filter: $filter, owner: $owner) {
+    onDeletePatient(filter: $filter, owner: $owner) {
       id
+      email
       name
       birth
       phone
-      description
+      scripts {
+        items {
+          id
+          email
+          patientID
+          script
+          summary
+          date
+          createdAt
+          updatedAt
+          owner
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      diagnoses {
+        items {
+          id
+          email
+          patientID
+          diagnosis
+          date
+          createdAt
+          updatedAt
+          owner
+          __typename
+        }
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+  }
+`;
+export const onCreateScript = /* GraphQL */ `
+  subscription OnCreateScript(
+    $filter: ModelSubscriptionScriptFilterInput
+    $owner: String
+  ) {
+    onCreateScript(filter: $filter, owner: $owner) {
+      id
+      email
+      patientID
       script
+      summary
+      date
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+  }
+`;
+export const onUpdateScript = /* GraphQL */ `
+  subscription OnUpdateScript(
+    $filter: ModelSubscriptionScriptFilterInput
+    $owner: String
+  ) {
+    onUpdateScript(filter: $filter, owner: $owner) {
+      id
+      email
+      patientID
+      script
+      summary
+      date
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+  }
+`;
+export const onDeleteScript = /* GraphQL */ `
+  subscription OnDeleteScript(
+    $filter: ModelSubscriptionScriptFilterInput
+    $owner: String
+  ) {
+    onDeleteScript(filter: $filter, owner: $owner) {
+      id
+      email
+      patientID
+      script
+      summary
+      date
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+  }
+`;
+export const onCreateDiagnosis = /* GraphQL */ `
+  subscription OnCreateDiagnosis(
+    $filter: ModelSubscriptionDiagnosisFilterInput
+    $owner: String
+  ) {
+    onCreateDiagnosis(filter: $filter, owner: $owner) {
+      id
+      email
+      patientID
+      diagnosis
+      date
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+  }
+`;
+export const onUpdateDiagnosis = /* GraphQL */ `
+  subscription OnUpdateDiagnosis(
+    $filter: ModelSubscriptionDiagnosisFilterInput
+    $owner: String
+  ) {
+    onUpdateDiagnosis(filter: $filter, owner: $owner) {
+      id
+      email
+      patientID
+      diagnosis
+      date
+      createdAt
+      updatedAt
+      owner
+      __typename
+    }
+  }
+`;
+export const onDeleteDiagnosis = /* GraphQL */ `
+  subscription OnDeleteDiagnosis(
+    $filter: ModelSubscriptionDiagnosisFilterInput
+    $owner: String
+  ) {
+    onDeleteDiagnosis(filter: $filter, owner: $owner) {
+      id
+      email
+      patientID
+      diagnosis
+      date
       createdAt
       updatedAt
       owner
