@@ -7,7 +7,6 @@ import AppProvider from './context/AppProvider'
 
 import App from './App';
 import Info from './pages/Info'
-import PlacedOrder from './pages/PlacedOrder'
 import Reko from './pages/Reko'
 import Script from './pages/Script'
 import Summary from './pages/Summary';
@@ -24,7 +23,6 @@ const routing = (
             <Switch>
                 <Route exact path="/" component={App} />
                 <Route path="/info" component={Info} />
-                <Route path="/ordercomplete" component={PlacedOrder}/>
                 <Route path="/script" component={Script} />
                 <Route path="/reko" component={Reko} />
                 <Route path="/Summary" component={Summary} />
