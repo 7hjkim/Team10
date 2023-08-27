@@ -71,8 +71,8 @@ function TopMenu() {
           </Dropdown>
           <Dropdown item text="Service Pages" className="menu-item" simple>
             <Dropdown.Menu>
-              <Dropdown.Item as={Link} to="/script">Script Translate</Dropdown.Item>
-              <Dropdown.Item as={Link} to="/reko">Diagnosis Translate</Dropdown.Item>
+              <Dropdown.Item as={Link} to="/script">Scripts & Summary</Dropdown.Item>
+              <Dropdown.Item as={Link} to="/reko">Medical Reports</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
           {user ? (
