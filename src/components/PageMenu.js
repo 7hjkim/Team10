@@ -42,7 +42,7 @@ function PageMenu() {
         </Menu.Item>
         <Menu.Menu position="right">
           <Menu.Item as={Link} to="/script" className="menu-item">
-            Script Translate
+            Script Translate 55
           </Menu.Item>
           <Menu.Item as={Link} to="/reko" className="menu-item">
             Diagnosis Translate
