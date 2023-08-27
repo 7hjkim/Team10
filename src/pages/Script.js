@@ -52,7 +52,7 @@ function Scirpt (props) {
     //For gpt api Key
     useEffect(() => {
         const configuration = new Configuration({
-            apiKey: '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',//process.env.REACT_APP_OPENAI_API_KEY,
+            apiKey: process.env.REACT_APP_OPENAI_API_KEY,
         });
         setOpenAIInstance(new OpenAIApi(configuration));
     }, []);
