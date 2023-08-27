@@ -316,7 +316,8 @@ const handleSendSelected = async () => {
           {selectedScript && (
             <div>
               <p><strong>Date:</strong> {new Date(selectedScript.date).toLocaleDateString()}</p>
-              <p><strong>Script:</strong> {convertNewlineToBreak(selectedScript.script)}</p>
+              <p><strong>Script_KOR:</strong> {convertNewlineToBreak(selectedScript.script)}</p>
+              <p><strong>Script_ENG:</strong> {convertNewlineToBreak(selectedScript.scripteng)}</p>
               <p><strong>Summary:</strong> {convertNewlineToBreak(selectedScript.summary)}</p>
             </div>
           )}
