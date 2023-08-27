@@ -14,13 +14,19 @@ Amplify.configure(awsExports);
 function Summary(props) {
     const [chatHistory, setChatHistory] = useState([]);
     const [summary, setSummary] = useState('');  // 요약된 내용을 저장할 상태
+    const [result, setResult] = useState('');
     const [openaiInstance, setOpenAIInstance] = useState(null);
     const [languageFilter, setLanguageFilter] = useState('all'); // all, korean, english
+    const [filterKorean, setFilterKorean] = useState([]);;
+    const [filterEnglish, setFilterEnglish] = useState([]);;
+    const [filterKorean2, setFilterKorean2] = useState([]);;
+    const [filterEnglish2, setFilterEnglish2] = useState([]);;
     
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const patientId = searchParams.get('patientId');
     const patientEmail = searchParams.get('patientEmail');
+    const patientName = searchParams.get('patientName');
     const onsetDate = searchParams.get('onsetDate');
     
 
@@ -35,14 +41,14 @@ function Summary(props) {
     // OpenAI 인스턴스 설정    
     useEffect(() => {
         const configuration = new Configuration({
-            apiKey: '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', 
+            apiKey:  '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',//process.env.REACT_APP_OPENAI_API_KEY, 
         });
         setOpenAIInstance(new OpenAIApi(configuration));
     },[]);
 
     useEffect(() => {
         const getSummary = async (script) => {
-            
+            //user 예시
             const user = 
                 `
                 홍길동님, 안녕하세요. 저는 김의사입니다. 어떤 증상으로 오셨나요?
@@ -56,7 +62,7 @@ function Summary(props) {
                 좋습니다. 검사가 끝나면 다시 상담을 통해 결과를 설명해드릴게요. 궁금한 점이나 우려사항이 있으면 언제든지 말씀해주세요.
                 `
                 
-                
+            //assistant 예시
             const assistant = 
                 `
                 환자의 증상 정보:
@@ -93,21 +99,52 @@ function Summary(props) {
 
         const generateSummary = async () => {
             const result = await getSummary(chatHistory.join(" "));
+
+            const joinedChatHistory = chatHistory.join("\n");
+            
+            const filteredKorean2 = joinedChatHistory.split('\n').filter(message => /[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/g.test(message));
+            const filteredEnglish2 = joinedChatHistory.split('\n').filter(message => !/[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/g.test(message));
+            
+     
+            const filteredKorean = filteredKorean2.join("\n");
+            const filteredEnglish = filteredEnglish2.join("\n");
+            
+            // console.log('filteredKorean_DB', filteredKoreanDB);
+            
+            setFilterKorean2(filteredKorean2);
+            setFilterEnglish2(filteredEnglish2);
+            
+            setFilterKorean(filteredKorean);
+            setFilterEnglish(filteredEnglish);
+            
+            console.log('filteredEnglish', filteredEnglish);
+            
             const summaryWithLineBreaks = result.split('\n').map((sentence, index) => (
                 <p key={index}>{sentence}</p>
             ));
-            // setSummary(result);
+            setResult(result);
             setSummary(summaryWithLineBreaks);
-            const createdScript = await createScriptRecord(patientEmail, patientId, chatHistory, result, onsetDate);
         };
-        
-        
-        async function createScriptRecord(patientEmail, scriptId, chatHistory, summary, onsetDate) {
+    
+
+        if (chatHistory.length) {
+            generateSummary();
+        }
+    }, [chatHistory, openaiInstance]);
+    
+    const handleSaveClick = async () => {
+        // createScriptRecord 함수를 호출하여 script를 생성
+        await createScriptRecord(patientEmail, patientName, patientId, filterKorean, filterEnglish, result, onsetDate);
+    };
+    
+    async function createScriptRecord(patientEmail, patientName, scriptId, filterKorean, filterEnglish, summary, onsetDate) {
           try {
             const input = {
               email: patientEmail, // 환자 이메일 또는 다른 식별자를 사용할 수 있음
+              name: patientName,
               patientID: scriptId,
-              script: JSON.stringify(chatHistory), // 채팅 내용을 JSON 문자열로 저장
+              script: filterKorean,
+              scripteng: filterEnglish,
               summary: summary,
               date: onsetDate,
             };
@@ -120,23 +157,25 @@ function Summary(props) {
             console.error('Error creating Script:', error);
             throw error;
           }
-        }
-
-        if (chatHistory.length) {
-            generateSummary();
-        }
-    }, [chatHistory, openaiInstance]);
+    }
     
+
+    
+
+
     const getFilteredMessages = () => {
-        const joinedChatHistory = chatHistory.join("\n"); // 첫번째 대화만 언어가 잘 나눠지지 않은 문제 해결
+        const joinedChatHistory = chatHistory.join("\n");
+    
         if (languageFilter === 'korean') {
-            return joinedChatHistory.split('\n').filter(message => /[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/g.test(message));
+            return filterKorean2; // 한국어 메시지에 대한 filterKorean 사용
         }
         if (languageFilter === 'english') {
-            return joinedChatHistory.split('\n').filter(message => !/[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/g.test(message));
+            return filterEnglish2; // 영어 메시지에 대한 filterEnglish 사용
         }
         return joinedChatHistory.split('\n');
     };
+    
+    
 
     return (
         <div>
@@ -145,9 +184,9 @@ function Summary(props) {
             <div style={styles.container}>
                 <h1>Script & Summary</h1>
                     <div style={styles.buttonGroup2}>
-                        <button style={styles.back} onClick={() => props.history.push('/polly')}>Back</button>
+                        <button style={styles.back} onClick={() => props.history.push('/script')}>Back</button>
                         <div style={{ flex: 1 }}></div>
-                        <button style={styles.save_button}>Save</button>
+                        <button style={styles.save_button} onClick={handleSaveClick}>Save</button>
                         <button style={styles.end_button} onClick={() => props.history.push('/')}>End</button>
                     </div>
                 <div style={styles.content}>
@@ -175,7 +214,7 @@ function Summary(props) {
                     </div>
                     <div style={styles.right}>
                         <div style={styles.template_right}>
-                            <h2 style={styles.h2}>Summary</h2>>
+                            <h2 style={styles.h2}>Summary</h2>
                             <p style={styles.summary}>{summary}</p>
                         </div>
                     </div>

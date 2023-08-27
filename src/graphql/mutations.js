@@ -1,6 +1,3 @@
-/* eslint-disable */
-// this is an auto generated file. This will be overwritten
-
 export const createPatient = /* GraphQL */ `
   mutation CreatePatient(
     $input: CreatePatientInput!
@@ -16,8 +13,10 @@ export const createPatient = /* GraphQL */ `
         items {
           id
           email
+          name
           patientID
           script
+          scripteng
           summary
           date
           createdAt
@@ -32,6 +31,7 @@ export const createPatient = /* GraphQL */ `
         items {
           id
           email
+          name
           patientID
           diagnosis
           date
@@ -65,8 +65,10 @@ export const updatePatient = /* GraphQL */ `
         items {
           id
           email
+          name
           patientID
           script
+          scripteng
           summary
           date
           createdAt
@@ -81,6 +83,7 @@ export const updatePatient = /* GraphQL */ `
         items {
           id
           email
+          name
           patientID
           diagnosis
           date
@@ -114,8 +117,10 @@ export const deletePatient = /* GraphQL */ `
         items {
           id
           email
+          name
           patientID
           script
+          scripteng
           summary
           date
           createdAt
@@ -130,6 +135,7 @@ export const deletePatient = /* GraphQL */ `
         items {
           id
           email
+          name
           patientID
           diagnosis
           date
@@ -156,8 +162,10 @@ export const createScript = /* GraphQL */ `
     createScript(input: $input, condition: $condition) {
       id
       email
+      name
       patientID
       script
+      scripteng
       summary
       date
       createdAt
@@ -175,8 +183,10 @@ export const updateScript = /* GraphQL */ `
     updateScript(input: $input, condition: $condition) {
       id
       email
+      name
       patientID
       script
+      scripteng
       summary
       date
       createdAt
@@ -194,8 +204,10 @@ export const deleteScript = /* GraphQL */ `
     deleteScript(input: $input, condition: $condition) {
       id
       email
+      name
       patientID
       script
+      scripteng
       summary
       date
       createdAt
@@ -213,6 +225,7 @@ export const createDiagnosis = /* GraphQL */ `
     createDiagnosis(input: $input, condition: $condition) {
       id
       email
+      name
       patientID
       diagnosis
       date
@@ -231,6 +244,7 @@ export const updateDiagnosis = /* GraphQL */ `
     updateDiagnosis(input: $input, condition: $condition) {
       id
       email
+      name
       patientID
       diagnosis
       date
@@ -249,6 +263,7 @@ export const deleteDiagnosis = /* GraphQL */ `
     deleteDiagnosis(input: $input, condition: $condition) {
       id
       email
+      name
       patientID
       diagnosis
       date

@@ -1,4 +1,4 @@
-.polly-container {
+.scirpt-container {
     font-family: 'Arial', sans-serif;
     background-color: #f9f9f9;
     padding: 20px;
@@ -14,18 +14,15 @@ h1 {
     margin-bottom: 30px;
     color: #555;
 }
-/*
-.date-text {
-    margin-top: 500px;
-}
 
-.date-selection {
-    width: '100%',
-    padding: '8px',
-    marginBottom: '15px',
-    border: '1px solid #ccc',
-    margin: '0 auto', 
-}*/
+/*.date-selection {*/
+/*    width: '100%',*/
+/*    padding: '8px',*/
+/*    marginBottom: '15px',*/
+/*    border: '1px solid #ccc',*/
+/*    borderRadius: '5px',*/
+/*    margin: '0 auto', */
+/*}*/
 
 .chat-box {
     max-height: 530px;

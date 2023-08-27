@@ -1,39 +1,77 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom'; // react-router-dom에서 Link를 불러옴
 import '../css/PageDesign.css';
 
-const ServiceItem = ({ iconClass, title, description, linkTo, imageSrc, buttonText }) => (
+// 각 서비스 아이템을 표시하는 함수형 컴포넌트
+const ServiceItem1 = ({ iconClass, title, description1, description2, description3, linkTo, imageSrc, buttonText }) => (
   <div className="col-lg-6 mb-5">
-    <div className="service-item bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
-      <div className="service-image mb-4">
-        <img src={imageSrc} alt={title} style={{ width: '300px', height: '210px' }} />
+    <div className="service-item bg-light rounded d-flex flex-column justify-content-center" style={styles.service_container}>
+      <div className="service-image mb-4 align-items-center">
+        <img src={imageSrc} alt={title} style={{ width: '300px', height: '280px' }} />
       </div>
       <h4 className="mb-3">{title}</h4>
-      <p className="m-0">{description}</p>
-      <Link to={linkTo} className="btn btn-lg btn-primary rounded-pill">{buttonText}</Link>
+      <div style={styles.description1}>
+        <p className="m-0">{description1}</p>
+      </div>
+      <div style={styles.description1}>
+        <p className="m-0 text-start">{description2}</p>
+      </div>
+      <div style={styles.description1}>
+        <p className="m-0 text-start">{description3}</p>
+      </div>
+      <Link to={linkTo} className="btn btn-lg btn-primary rounded-pill" style={styles.service_button}>{buttonText}</Link>
     </div>
   </div>
 );
 
+const ServiceItem2 = ({ iconClass, title, description1, description2, description3, linkTo, imageSrc, buttonText }) => (
+  <div className="col-lg-6 mb-5">
+    <div className="service-item bg-light rounded d-flex flex-column justify-content-center" style={styles.service_container}>
+      <div className="service-image mb-4 align-items-center">
+        <img src={imageSrc} alt={title} style={{ width: '300px', height: '280px' }} />
+      </div>
+      <h4 className="mb-3">{title}</h4>
+      <div style={styles.description2}>
+        <p className="m-0">{description1}</p>
+      </div>
+      <div style={styles.description2}>
+        <p className="m-0 text-start">{description2}</p>
+      </div>
+      <div style={styles.description2}>
+        <p className="m-0 text-start">{description3}</p>
+      </div>
+      <Link to={linkTo} className="btn btn-lg btn-primary rounded-pill" style={styles.service_button}>{buttonText}</Link>
+    </div>
+  </div>
+);
+
+// 서비스 섹션 컴포넌트
 const ServicesSection = () => {
-  const services = [
+  const services1 = [
     {
       iconClass: "fa fa-2x fa-user-md",
-      title: "Script Translation and Summary",
-      description: "이 서비스는 의사와 외국인 환자의 대화를 필사하고 필요한 언어로 번역하여 요약함으로써 의사와 외국인 환자 사이의 의사소통을 용이하게 합니다.",
-      linkTo: "/polly", // Change this to the appropriate route
-      imageSrc: "/images/Service1.png", // Change this to the path of the image
+      title: "실시간 음성인식 및 텍스트 번역 요약 서비스",
+      description1: "▶ 실시간 음성인식 후 텍스트로 변환",
+      description2: "▶ 텍스트 실시간 양방향 번역",
+      description3: "▶ 진료 대화 요약",
+      linkTo: "/polly", // 해당 경로로 수정
+      imageSrc: "/images/Script.png", // 이미지 경로로 수정
       buttonText: "대화 번역 및 요약"
-    },
+    }
+  ];
+  const services2 = [
     {
       iconClass: "fa fa-2x fa-procedures",
-      title: "Diagnosis Translation",
-      description: "이 서비스는 병원에서 의사가 입력한 진단서의 내용을 번역하여 외국인 환자에게 SNS를 통해 제공함으로써 정확한 진단에 대한 이해를 돕습니다.",
-      linkTo: "/reko", // Change this to the appropriate route
-      imageSrc: "/images/Service2.png", // Change this to the path of the image
+      title: "진단서 번역 및 이메일 발송 서비스",
+      description1: "▶ 진단서 내용 번역",
+      description2: " ",
+      description3: "▶ 환자 이메일로 진단서 전송",
+      linkTo: "/reko", // 해당 경로로 수정
+      imageSrc: "/images/Diagnosis.png", // 이미지 경로로 수정
       buttonText: "진단서 번역"
     }
   ];
+  
 
   return (
     <div className="services-container" id="service-section">
@@ -45,12 +83,27 @@ const ServicesSection = () => {
             <h1 className="display-4">AI MEDICO Services</h1>
           </div>
           <div className="row g-5">
-            {services.map((service, index) => (
-              <ServiceItem
+            {services1.map((service, index) => (
+              <ServiceItem1
                 key={index}
                 iconClass={service.iconClass}
                 title={service.title}
-                description={service.description}
+                description1={service.description1}
+                description2={service.description2}
+                description3={service.description3}
+                linkTo={service.linkTo}
+                imageSrc={service.imageSrc}
+                buttonText={service.buttonText}
+              />
+            ))}
+              {services2.map((service, index) => (
+              <ServiceItem2
+                key={index}
+                iconClass={service.iconClass}
+                title={service.title}
+                description1={service.description1}
+                description2={service.description2}
+                description3={service.description3}
                 linkTo={service.linkTo}
                 imageSrc={service.imageSrc}
                 buttonText={service.buttonText}
@@ -64,3 +117,23 @@ const ServicesSection = () => {
 };
 
 export default ServicesSection;
+
+// 스타일 정의
+const styles = {
+  description1: {
+    textAlign: 'left',
+    marginLeft: '45px',
+    marginBottom: '10px',
+  },
+  description2: {
+    textAlign: 'left',
+    marginLeft: '100px',
+    marginBottom: '16px',
+  },
+  service_container: {
+    height: '600px',
+  },
+  service_button: {
+    marginBottom: `10px`,
+  }
+};

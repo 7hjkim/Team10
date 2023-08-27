@@ -1,6 +1,3 @@
-/* eslint-disable */
-// this is an auto generated file. This will be overwritten
-
 export const getPatient = /* GraphQL */ `
   query GetPatient($id: ID!) {
     getPatient(id: $id) {
@@ -13,8 +10,10 @@ export const getPatient = /* GraphQL */ `
         items {
           id
           email
+          name
           patientID
           script
+          scripteng
           summary
           date
           createdAt
@@ -29,6 +28,7 @@ export const getPatient = /* GraphQL */ `
         items {
           id
           email
+          name
           patientID
           diagnosis
           date
@@ -83,8 +83,10 @@ export const getScript = /* GraphQL */ `
     getScript(id: $id) {
       id
       email
+      name
       patientID
       script
+      scripteng
       summary
       date
       createdAt
@@ -104,8 +106,10 @@ export const listScripts = /* GraphQL */ `
       items {
         id
         email
+        name
         patientID
         script
+        scripteng
         summary
         date
         createdAt
@@ -138,8 +142,10 @@ export const scriptsByPatientIDAndScript = /* GraphQL */ `
       items {
         id
         email
+        name
         patientID
         script
+        scripteng
         summary
         date
         createdAt
@@ -157,6 +163,7 @@ export const getDiagnosis = /* GraphQL */ `
     getDiagnosis(id: $id) {
       id
       email
+      name
       patientID
       diagnosis
       date
@@ -177,6 +184,7 @@ export const listDiagnoses = /* GraphQL */ `
       items {
         id
         email
+        name
         patientID
         diagnosis
         date
@@ -210,6 +218,7 @@ export const diagnosesByPatientIDAndDiagnosis = /* GraphQL */ `
       items {
         id
         email
+        name
         patientID
         diagnosis
         date

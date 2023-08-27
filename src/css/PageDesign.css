@@ -201,3 +201,7 @@ body {
   font-size: 1.5rem;
   color: #13c5dd;
 }
+
+.left-align {
+    text-align: left !important;
+}

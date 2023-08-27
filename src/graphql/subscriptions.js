@@ -1,6 +1,3 @@
-/* eslint-disable */
-// this is an auto generated file. This will be overwritten
-
 export const onCreatePatient = /* GraphQL */ `
   subscription OnCreatePatient(
     $filter: ModelSubscriptionPatientFilterInput
@@ -16,8 +13,10 @@ export const onCreatePatient = /* GraphQL */ `
         items {
           id
           email
+          name
           patientID
           script
+          scripteng
           summary
           date
           createdAt
@@ -32,6 +31,7 @@ export const onCreatePatient = /* GraphQL */ `
         items {
           id
           email
+          name
           patientID
           diagnosis
           date
@@ -65,8 +65,10 @@ export const onUpdatePatient = /* GraphQL */ `
         items {
           id
           email
+          name
           patientID
           script
+          scripteng
           summary
           date
           createdAt
@@ -81,6 +83,7 @@ export const onUpdatePatient = /* GraphQL */ `
         items {
           id
           email
+          name
           patientID
           diagnosis
           date
@@ -114,8 +117,10 @@ export const onDeletePatient = /* GraphQL */ `
         items {
           id
           email
+          name
           patientID
           script
+          scripteng
           summary
           date
           createdAt
@@ -130,6 +135,7 @@ export const onDeletePatient = /* GraphQL */ `
         items {
           id
           email
+          name
           patientID
           diagnosis
           date
@@ -156,8 +162,10 @@ export const onCreateScript = /* GraphQL */ `
     onCreateScript(filter: $filter, owner: $owner) {
       id
       email
+      name
       patientID
       script
+      scripteng
       summary
       date
       createdAt
@@ -175,8 +183,10 @@ export const onUpdateScript = /* GraphQL */ `
     onUpdateScript(filter: $filter, owner: $owner) {
       id
       email
+      name
       patientID
       script
+      scripteng
       summary
       date
       createdAt
@@ -194,8 +204,10 @@ export const onDeleteScript = /* GraphQL */ `
     onDeleteScript(filter: $filter, owner: $owner) {
       id
       email
+      name
       patientID
       script
+      scripteng
       summary
       date
       createdAt
@@ -213,6 +225,7 @@ export const onCreateDiagnosis = /* GraphQL */ `
     onCreateDiagnosis(filter: $filter, owner: $owner) {
       id
       email
+      name
       patientID
       diagnosis
       date
@@ -231,6 +244,7 @@ export const onUpdateDiagnosis = /* GraphQL */ `
     onUpdateDiagnosis(filter: $filter, owner: $owner) {
       id
       email
+      name
       patientID
       diagnosis
       date
@@ -249,6 +263,7 @@ export const onDeleteDiagnosis = /* GraphQL */ `
     onDeleteDiagnosis(filter: $filter, owner: $owner) {
       id
       email
+      name
       patientID
       diagnosis
       date

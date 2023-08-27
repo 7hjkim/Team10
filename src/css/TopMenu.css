@@ -1,10 +1,13 @@
 .top-menu-container {
-  background-color: #212529;
+  background-color: pink;
   padding: 10px 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 100px;
 }
 
+.test{
+   background-color: red;
+}
 .logo-item {
   margin-right: auto;
   padding-left: 20px;
@@ -65,7 +68,7 @@
 }
 
 .patient-button {
-  background-color: #f39c12;
+  background-color: #13c5dd;
   color: #fff;
   border: none;
   border-radius: 30px;

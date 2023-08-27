@@ -1,19 +1,20 @@
 const signUpConfig = {
-  header: 'Create an Amplify-Workshop Store Account',
+  header: 'Create an [AI MEDICO] Account',
   defaultCountryCode: '82',
   signUpFields: [
+
     {
-      label: 'First name',
-      key: 'given_name',
-      required: true,
-      displayOrder: 100,
-      type: 'string'
-    },
-    {
-      label: 'Last name',
+      label: 'Contact Name',
       key: 'family_name',
       required: true,
       displayOrder: 101,
+      type: 'string'
+    },
+      {
+      label: 'Hospital name',
+      key: 'given_name',
+      required: true,
+      displayOrder: 100,
       type: 'string'
     },
     {

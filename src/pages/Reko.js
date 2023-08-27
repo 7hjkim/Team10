@@ -12,29 +12,33 @@ import PageMenu from '../components/PageMenu';
 Amplify.configure(awsExports);
 
 const MedicalCertificate = (props) => {
-    const [patientName, setPatientName] = useState('');
-    const [onsetDate, setOnsetDate] = useState('');
-    const [diagnosis, setDiagnosis] = useState('');
-    const [treatment, setTreatment] = useState('');
-    const [futureTreatment, setFutureTreatment] = useState('');
-    const [nextAppointment, setNextAppointment] = useState('');
-    const [translatedContent, setTranslatedContent] = useState('');
+    // 환자 정보 및 진단서 관련 상태 변수
+    const [patientName, setPatientName] = useState(''); 
+    const [onsetDate, setOnsetDate] = useState(''); 
+    const [diagnosis, setDiagnosis] = useState(''); 
+    const [treatment, setTreatment] = useState(''); 
+    const [futureTreatment, setFutureTreatment] = useState(''); 
+    const [nextAppointment, setNextAppointment] = useState(''); 
+    const [translatedContent, setTranslatedContent] = useState(''); 
     
-    const [items, setItems] = useState([]);
-    const [selectedName, setSelectedName] = useState('');
-    const [SelectedEmail, setSelectedEmail] = useState('');
-    const [SelectedId, setSelectedId] = useState('');
+    // 환자 목록 및 선택된 환자 관련 상태 변수
+    const [items, setItems] = useState([]); 
+    const [selectedName, setSelectedName] = useState(''); 
+    const [SelectedEmail, setSelectedEmail] = useState(''); 
+    const [SelectedId, setSelectedId] = useState(''); 
     
     const dropdownStyle = {
         marginTop: '1em',
         marginLeft: '1em',
     };
     
+    // 환자 목록을 가져오는 함수
     async function listPatientItem() {
         const patients = await API.graphql(graphqlOperation(listPatients));
         setItems(patients.data.listPatients.items);
     }
     
+    // 컴포넌트가 로드될 때 한 번 실행되어 환자 목록을 가져옴
     useEffect(() => {
         listPatientItem();
     }, []);
@@ -47,7 +51,7 @@ const MedicalCertificate = (props) => {
         return true;
     };
 
-
+    // 번역 및 저장 함수
     const getTranslate = async () => {
         try {
             const response = await fetch("https://y33tqo6n7l6bisqnr5uyu747y40jozlo.lambda-url.ap-northeast-2.on.aws/translate", {
@@ -67,16 +71,21 @@ const MedicalCertificate = (props) => {
 
             const data = await response.json();
             setTranslatedContent(data.assistant);
-            const createdDiagnosis = await createDiagnosisRecord(SelectedEmail, SelectedId, data.assistant, onsetDate);
+            
+            // 진단 기록을 생성하는 함수 호출
+            await createDiagnosisRecord(SelectedEmail, selectedName, SelectedId, data.assistant, onsetDate);
         } catch (error) {
             console.error(error);
         }
-        async function createDiagnosisRecord(SelectedEmail, SelectedId, diagnosis, onsetDate) {
+        
+        // 진단 기록 생성 함수
+        async function createDiagnosisRecord(SelectedEmail, selectedName, SelectedId, diagnosis, onsetDate) {
           try {
             const input = {
-              email: SelectedEmail, // 환자 이메일 또는 다른 식별자를 사용할 수 있음
+              email: SelectedEmail, 
+              name: selectedName,
               patientID: SelectedId,
-              diagnosis: diagnosis, // 채팅 내용을 JSON 문자열로 저장
+              diagnosis: diagnosis, 
               date: onsetDate,
             };
         
@@ -91,7 +100,7 @@ const MedicalCertificate = (props) => {
         }
     };
     
-    
+    // 환자 선택 핸들러
     const handleSelectPatient = (item) => {
         setSelectedName(item.name);
         setSelectedEmail(item.email);
@@ -168,6 +177,8 @@ const MedicalCertificate = (props) => {
 }
 export default MedicalCertificate;
 
+
+// 스타일 및 레이아웃을 정의하는 스타일 객체
 const styles = {
     container: {
         fontFamily: 'Arial, sans-serif',

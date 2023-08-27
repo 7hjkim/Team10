@@ -1,11 +1,12 @@
 import React from 'react';
 import '../css/bootstrap.min.css';
-import { Container, Header, Image } from 'semantic-ui-react';
-import '../css/PageDesign.css'; // Import your CSS file for styling
+import { Image } from 'semantic-ui-react';
+import '../css/PageDesign.css'; 
 
+// 팀 멤버 컴포넌트
 const TeamMember = ({ name, university, major, imageSrc }) => (
   <div className="col-sm-4 col-md-2">
-    <div className="team-member bg-light rounded d-flex flex-column align-items-center justify-content-center text-center">
+    <div className="team-member bg-light rounded d-flex flex-column align-items-center justify-content-center text-center" style = {styles.team_container}>
       <div className="member-avatar mb-3">
         <Image src={imageSrc} size='medium'  circular style={{ width: '120px', height: '130px' }}/>
       </div>
@@ -18,6 +19,7 @@ const TeamMember = ({ name, university, major, imageSrc }) => (
 );
 
 const AboutSection = () => {
+  // 팀 멤버 정보 배열
   const teamMembers = [
     {
       name: "김현준",
@@ -27,14 +29,14 @@ const AboutSection = () => {
     },
     {
       name: "김도현",
-      university: "-",
-      major: "-",
+      university: "명지대학교",
+      major: "데이터테크놀로지학과",
       imageSrc: "../images/member2.jpg"
     },
     {
       name: "문지은",
-      university: "-",
-      major: "-",
+      university: "방송통신대학교",
+      major: "통계학과",
       imageSrc: "../images/member3.jpg"
     },
     {
@@ -45,8 +47,8 @@ const AboutSection = () => {
     },
     {
       name: "이재훈",
-      university: "-",
-      major: "-",
+      university: "단국대학교",
+      major: "정보통계학과",
       imageSrc: "../images/member5.jpg"
     },
     {
@@ -57,6 +59,7 @@ const AboutSection = () => {
     },
   ];
 
+  // 팀 소개 문구
   const teamDescription = "우리 팀은 을지대학교 학생 3명과 타 대학 학생 3명의 시너지를 상징하는 '3355팀'이라는 개념을 수용해 AI 의료 코디네이터 프로젝트에 공동으로 착수했습니다.";
 
   return (
@@ -89,3 +92,11 @@ const AboutSection = () => {
 };
 
 export default AboutSection;
+
+const styles = {
+  team_container: {
+    height: '300px',
+    width: '200px',
+    margin: 'auto'
+  }
+};

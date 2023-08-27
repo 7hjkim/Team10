@@ -21,8 +21,10 @@ type Script @model
   ) {
   id: ID!
   email: String!
+  name: String!
   patientID: ID! @index(name: "byPatient", sortKeyFields: ["script"])
   script: String!
+  scripteng: String!
   summary: String!
   date: String!
 }
@@ -37,6 +39,7 @@ type Diagnosis @model
   ) {
   id: ID!
   email: String!
+  name: String!
   patientID: ID! @index(name: "byPatient", sortKeyFields: ["diagnosis"])
   diagnosis: String!
   date: String!
