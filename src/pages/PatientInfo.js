@@ -225,7 +225,7 @@ const handleSendSelected = async () => {
     if (selectedScript) {
       const recipientEmail = patient.email;
       const emailSubject = "Selected Script";
-      const formattedScript = selectedScript.script.replace(/(.*?,.*?),/g, "$1<br/>");
+      const formattedScript = selectedScript.scripteng.replace(/(.*?,.*?),/g, "$1<br/>");
       const emailContent = `
         <div style="font-family: Arial, sans-serif; padding: 20px;">
           <h2 style="color: #333;">Script Details</h2>
