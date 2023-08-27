@@ -126,26 +126,47 @@ function convertToDate(dateString) {
   
 
 const sendEmail = async (recipientEmail, subject, content) => {
-    try {
-      const userData = await Auth.currentUserInfo();
-      const senderEmail = userData.attributes.email;
+  try {
+    const userData = await Auth.currentUserInfo();
+    const senderEmail = userData.attributes.email;
 
-      const emailParams = {
-        Source: senderEmail,
-        Destination: {
-          ToAddresses: [recipientEmail],
-        },
-        Message: {
-          Subject: {
-            Data: subject,
-          },
-          Body: {
-            Html: {
-              Data: content,
-            },
-          },
-        },
-      };
+    const formattedContent = content.split('\n').map(line => {
+      return `<tr><td>${line}</td></tr>`;
+    }).join('');
+
+const emailParams = {
+  Source: senderEmail,
+  Destination: {
+    ToAddresses: [recipientEmail],
+  },
+  Message: {
+    Subject: {
+      Data: subject,
+    },
+    Body: {
+      Html: {
+        Data: `
+          <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f6f6f6; border-radius: 10px;">
+            <header style="background-color: #317873; color: #fff; padding: 10px 15px; border-radius: 10px 10px 0 0; font-size: 20px;">
+              AI MEDICO
+            </header>
+            <section style="background-color: #fff; padding: 20px; border-radius: 0 0 10px 10px;">
+              <table style="font-family: 'Georgia', serif; font-size: 16px; color: #555; width: 100%;">
+                <tbody>
+                  ${formattedContent}
+                </tbody>
+              </table>
+            </section>
+            <footer style="margin-top: 20px; text-align: center; font-size: 12px;">
+              We hope you are feeling better soon
+            </footer>
+          </div>
+        `,
+      },
+    },
+  },
+};
+
 
       await ses.sendEmail(emailParams).promise();
       return true;
